@@ -45,8 +45,8 @@
   }
 
   /* ── BEAR ── */
-  .bear-wrap { position: relative; width: 130px; height: 130px; }
-  .bear { font-size: 100px; line-height: 1; display: block; text-align: center;
+  .bear-wrap { position: relative; width: 90px; height: 90px; }
+  .bear { font-size: 72px; line-height: 1; display: block; text-align: center;
     filter: drop-shadow(0 6px 12px rgba(0,0,0,.15));
     transition: transform .2s; }
   .bear.bounce { animation: bearBounce .5s ease; }
@@ -62,9 +62,9 @@
   .bubble {
     background: var(--white);
     border-radius: 22px;
-    padding: 16px 22px;
+    padding: 10px 18px;
     box-shadow: 0 4px 20px rgba(0,0,0,.12);
-    font-size: 1.05rem;
+    font-size: .95rem;
     color: var(--dark);
     line-height: 1.5;
     text-align: center;
@@ -129,11 +129,16 @@
   .btn-op.selected { border-color: var(--purple); background: #f0ecff; }
 
   .btn-level {
-    font-size: 1rem; padding: 12px 18px;
+    font-size: 1rem; padding: 10px 10px;
     background: var(--white); border: 3px solid transparent; color: var(--dark);
     box-shadow: 0 3px 10px rgba(0,0,0,.08);
     flex: 1; min-width: 80px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
   }
+  .lvl-icon { font-size: 1.3rem; line-height: 1; }
+  .lvl-text { display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
+  .lvl-text b { font-size: .9rem; }
+  .lvl-text small { font-size: .75rem; color: #888; }
   .btn-level.selected { border-color: var(--grass); background: #e8fded; }
 
   .btn-start {
@@ -160,12 +165,12 @@
   .question-box {
     background: var(--card);
     border-radius: 28px;
-    padding: 28px;
+    padding: 16px;
     width: 100%;
     text-align: center;
     box-shadow: 0 6px 28px rgba(0,0,0,.1);
   }
-  .question-text { font-size: 2.6rem; font-weight: 900; color: var(--dark); line-height: 1.2; }
+  .question-text { font-size: 2.2rem; font-weight: 900; color: var(--dark); line-height: 1.2; }
   .answer-display {
     margin-top: 14px;
     font-size: 2rem; font-weight: 900;
@@ -182,7 +187,7 @@
     width: 100%;
   }
   .btn-digit {
-    font-size: 1.4rem; padding: 14px 0;
+    font-size: 1.3rem; padding: 11px 0;
     background: var(--white);
     color: var(--dark);
     box-shadow: 0 3px 8px rgba(0,0,0,.1);
@@ -292,6 +297,24 @@
     box-shadow: 0 3px 10px rgba(255,159,67,.4);
   }
 
+  /* ── LANG TOGGLE ── */
+  .lang-bar {
+    display: flex; gap: 8px; justify-content: center;
+    width: 100%;
+  }
+  .btn-lang {
+    font-size: 1.1rem; padding: 8px 18px;
+    background: rgba(255,255,255,.5);
+    border-radius: 50px; border: 2px solid transparent;
+    cursor: pointer; font-family: inherit; font-weight: 700;
+    transition: all .15s;
+  }
+  .btn-lang.active {
+    background: var(--white);
+    border-color: var(--purple);
+    box-shadow: 0 2px 8px rgba(167,139,250,.3);
+  }
+
   /* ── STATS BUTTON ── */
   .btn-stats {
     font-size: .95rem; padding: 12px 24px;
@@ -339,12 +362,17 @@
 
 <!-- ══ MENU ══ -->
 <div class="screen active" id="screen-menu">
+  <div class="lang-bar">
+    <button class="btn-lang active" onclick="setLang('ru')" id="lang-ru">🇷🇺 Русский</button>
+    <button class="btn-lang" onclick="setLang('de')" id="lang-de">🇩🇪 Deutsch</button>
+    <button class="btn-lang" onclick="setLang('en')" id="lang-en">🇬🇧 English</button>
+  </div>
   <div class="bear-wrap"><span class="bear" id="bear-menu">🐻</span></div>
-  <div class="bubble">Привет! Я Мишка. Давай порешаем примеры вместе! 🍯</div>
-  <div class="title">Математика<br>с Мишкой</div>
+  <div class="bubble" id="menu-bubble">Привет! Я Мишка. Давай порешаем примеры вместе! 🍯</div>
+  <div class="title" id="app-title">Математика<br>с Мишкой</div>
 
   <div class="card">
-    <div class="card-title">Выбери действие</div>
+    <div class="card-title" id="lbl-op">Выбери действие</div>
     <div class="btn-group" id="op-group">
       <button class="btn btn-op selected" data-op="both">🔀 Всё вместе</button>
       <button class="btn btn-op" data-op="add">➕ Сложение</button>
@@ -353,11 +381,11 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Выбери уровень</div>
+    <div class="card-title" id="lbl-lvl">Выбери уровень</div>
     <div class="btn-group" id="lvl-group">
-      <button class="btn btn-level selected" data-lvl="1">🌱 Лёгкий<br><small>до 100</small></button>
-      <button class="btn btn-level" data-lvl="2">⭐ Средний<br><small>до 200</small></button>
-      <button class="btn btn-level" data-lvl="3">🔥 Сложный<br><small>до 500</small></button>
+      <button class="btn btn-level selected" data-lvl="1"><span class="lvl-icon">🌱</span><span class="lvl-text"><b>Лёгкий</b><small>до 100</small></span></button>
+      <button class="btn btn-level" data-lvl="2"><span class="lvl-icon">⭐</span><span class="lvl-text"><b>Средний</b><small>до 200</small></span></button>
+      <button class="btn btn-level" data-lvl="3"><span class="lvl-icon">🔥</span><span class="lvl-text"><b>Сложный</b><small>до 500</small></span></button>
     </div>
   </div>
 
@@ -368,9 +396,9 @@
 <!-- ══ GAME ══ -->
 <div class="screen" id="screen-game">
   <div class="score-bar">
-    <div class="score-item"><span class="score-label">Вопрос</span><span class="score-val" id="q-num">1/10</span></div>
-    <div class="score-item"><span class="score-label">✅ Верно</span><span class="score-val" id="s-correct">0</span></div>
-    <div class="score-item"><span class="score-label">❌ Ошибки</span><span class="score-val" id="s-wrong">0</span></div>
+    <div class="score-item"><span class="score-label" id="lbl-q">Вопрос</span><span class="score-val" id="q-num">1/10</span></div>
+    <div class="score-item"><span class="score-label" id="lbl-correct">✅ Верно</span><span class="score-val" id="s-correct">0</span></div>
+    <div class="score-item"><span class="score-label" id="lbl-wrong">❌ Ошибки</span><span class="score-val" id="s-wrong">0</span></div>
     <button class="btn btn-home" onclick="confirmHome()" title="На главную">🏠</button>
   </div>
 
@@ -412,44 +440,224 @@
     <div class="result-score" id="res-summary">Правильных: <span id="res-correct">0</span> из 10</div>
   </div>
   <div class="card" id="mistakes-card" style="display:none">
-    <div class="card-title">📋 Разбор ошибок</div>
+    <div class="card-title" id="mistakes-title">📋 Разбор ошибок</div>
     <div id="mistakes-list"></div>
   </div>
   <div class="btn-group">
-    <button class="btn btn-again" onclick="startGame()">🔄 Ещё раз!</button>
-    <button class="btn btn-menu" onclick="goMenu()">🏠 Меню</button>
+    <button class="btn btn-again" onclick="startGame()" id="btn-again">🔄 Ещё раз!</button>
+    <button class="btn btn-menu" onclick="goMenu()" id="btn-menu-result">🏠 Меню</button>
   </div>
 </div>
 
 <!-- ══ STATS ══ -->
 <div class="screen" id="screen-stats">
   <div class="bear-wrap"><span class="bear">🐻</span></div>
-  <div class="title" style="font-size:1.6rem">📊 Статистика</div>
+  <div class="title" style="font-size:1.6rem" id="stats-main-title">📊 Статистика</div>
 
   <div class="card" id="stats-today">
-    <div class="card-title">📅 Сегодня</div>
+    <div class="card-title" id="stats-today-title">📅 Сегодня</div>
     <div id="stats-today-body"></div>
   </div>
 
   <div class="card" id="stats-week">
-    <div class="card-title">📈 За 7 дней</div>
+    <div class="card-title" id="stats-week-title">📈 За 7 дней</div>
     <div id="stats-week-body"></div>
   </div>
 
   <div class="card" id="stats-weak">
-    <div class="card-title">🎯 Слабые места</div>
+    <div class="card-title" id="stats-weak-title">🎯 Слабые места</div>
     <div id="stats-weak-body"></div>
   </div>
 
   <div class="btn-group">
-    <button class="btn btn-menu" onclick="goMenu()">← Назад</button>
-    <button class="btn btn-clear" onclick="clearStats()">🗑 Очистить</button>
+    <button class="btn btn-menu" onclick="goMenu()" id="btn-stats-back">← Назад</button>
+    <button class="btn btn-clear" onclick="clearStats()" id="btn-stats-clear">🗑 Очистить</button>
   </div>
 </div>
 
 <div class="confetti-wrap" id="confetti"></div>
 
 <script>
+// ── Переводы ──
+const LANG = {
+  ru: {
+    appTitle: 'Математика<br>с Мишкой', menuBubble: 'Привет! Я Мишка. Давай порешаем примеры вместе! 🍯',
+    opLabel: 'Выбери действие',
+    opAdd: '➕ Сложение', opSub: '➖ Вычитание', opBoth: '🔀 Всё вместе',
+    lvlLabel: 'Выбери уровень',
+    lvl1: '🌱 Лёгкий', lvl1sub: 'до 100',
+    lvl2: '⭐ Средний', lvl2sub: 'до 200',
+    lvl3: '🔥 Сложный', lvl3sub: 'до 500',
+    startBtn: '🚀 Начать!',
+    statsBtn: '📊 Статистика для родителей',
+    qLabel: 'Вопрос', correctLabel: '✅ Верно', wrongLabel: '❌ Ошибки',
+    bearAdd: 'Сколько будет? 🤔', bearSub: 'Посчитай! 🐾',
+    bearCorrect: 'Ура, верно! 🎊', bearStreak: '🔥 Ты в ударе!',
+    correctBig: '🎉 Правильно!',
+    wrongBig: '😢 Не совсем...',
+    wrongMsg: 'Ты написал', wrongRight: 'а правильно:',
+    nextBtn: '➡️ Дальше', finishBtn: '🏁 Результат',
+    result10: 'Все 10 из 10! Ты настоящий чемпион! 🏆',
+    result9: 'Почти идеально! Ещё чуть-чуть до рекорда! 🌟',
+    result7: 'из 10 — отлично! До трёх звёзд осталось совсем немного 💪',
+    result5: 'из 10 — хорошее начало! Повторим — и будет лучше! 📚',
+    result3: 'Не беда! Посмотри на ошибки ниже — там всё объяснено 🐻',
+    result0: 'Мы только учимся! Разбери ошибки вместе с мамой или папой 🍯',
+    againBtn: '🔄 Ещё раз!', menuBtn: '🏠 Меню',
+    mistakesTitle: '📋 Разбор ошибок',
+    youWrote: 'Ты:', correct: 'Верно:',
+    statsTitle: '📊 Статистика',
+    statsToday: '📅 Сегодня', statsWeek: '📈 За 7 дней', statsWeak: '🎯 Слабые места',
+    statsSessions: 'Сессий сыграно', statsTotal: 'Примеров решено',
+    statsCorrect: 'Правильных', statsAccuracy: 'Точность', statsTime: 'Время занятий',
+    statsMin: 'мин', statsBack: '← Назад', statsClear: '🗑 Очистить',
+    statsEmpty: 'Сегодня ещё не играли', statsWeekEmpty: 'За 7 дней нет данных',
+    statsWeakEmpty: 'Ошибок пока не было 🎉', statsWeakErrors: 'ошибок:',
+    statsDays: 'По дням:', statsAvg: 'Средняя точность', statsAllTotal: 'Всего примеров',
+    explainDecomp: 'Разложим', explainParts: 'на удобные части:',
+    explainDecompAdd: 'Разложим', explainPartsAdd: 'на части:',
+    explainComplement: 'Считаем сколько надо прибавить к', explainComplementTo: 'чтобы получить',
+    explainSum: 'Складываем добавки:', explainResult: 'Значит:',
+    explainZero: 'Если вычитаем 0 — число не меняется!',
+    explainSame: 'Если вычитаем то же число — получаем 0!',
+    motivCorrect: ['Вот это да! Ты настоящий математик! 🌟','Супер! Так держать! 💪','Браво! Мне так за тебя радостно! 🎉','Великолепно! Ты меня удивляешь! 🍯','Правильно! Ты умничка! 🐾','Отлично! Ещё немного — и станешь чемпионом! 🏆','Ух ты! Это было быстро! ⚡','Молодец! Продолжай — у тебя всё получается! 🚀'],
+    motivWrong: ['Не расстраивайся — ошибки нас учат! 💡','Ничего страшного! Давай разберёмся вместе 🐻','Ошибиться — это нормально! Главное — понять 📚','Даже я иногда путаюсь! Попробуем ещё раз 🍀','Не беда! Следующий будет твоим! 🌱'],
+    streakMsg: [null,null,'2 подряд! Зажигаешь! 🔥','3 подряд! Ты в ударе! ⚡','4 подряд! Просто невероятно! 🌟','5 подряд! Ты — чемпион! 🏆'],
+    homeConfirm: 'Вернуться в меню? Прогресс будет потерян.',
+    clearConfirm: 'Удалить всю статистику?',
+  },
+  de: {
+    appTitle: 'Mathe<br>mit Bärchen', menuBubble: 'Hallo! Ich bin Bärchen. Lass uns Aufgaben lösen! 🍯',
+    opLabel: 'Wähle eine Aufgabe',
+    opAdd: '➕ Addition', opSub: '➖ Subtraktion', opBoth: '🔀 Gemischt',
+    lvlLabel: 'Wähle eine Stufe',
+    lvl1: '🌱 Leicht', lvl1sub: 'bis 100',
+    lvl2: '⭐ Mittel', lvl2sub: 'bis 200',
+    lvl3: '🔥 Schwer', lvl3sub: 'bis 500',
+    startBtn: "🚀 Los geht's!",
+    statsBtn: '📊 Statistik für Eltern',
+    qLabel: 'Aufgabe', correctLabel: '✅ Richtig', wrongLabel: '❌ Fehler',
+    bearAdd: 'Wie viel ist das? 🤔', bearSub: 'Rechne nach! 🐾',
+    bearCorrect: 'Juhu, richtig! 🎊', bearStreak: '🔥 Du bist super!',
+    correctBig: '🎉 Richtig!',
+    wrongBig: '😢 Fast...',
+    wrongMsg: 'Du hast geschrieben', wrongRight: 'richtig ist:',
+    nextBtn: '➡️ Weiter', finishBtn: '🏁 Ergebnis',
+    result10: 'Alle 10 von 10! Du bist ein echter Champion! 🏆',
+    result9: 'Fast perfekt! Noch ein bisschen! 🌟',
+    result7: 'von 10 — toll! Noch ein paar bis drei Sterne 💪',
+    result5: 'von 10 — guter Anfang! Üben wir nochmal! 📚',
+    result3: 'Nicht schlimm! Schau dir die Fehler unten an 🐻',
+    result0: 'Wir lernen noch! Schau mit Mama oder Papa nach 🍯',
+    againBtn: '🔄 Nochmal!', menuBtn: '🏠 Menü',
+    mistakesTitle: '📋 Fehleranalyse',
+    youWrote: 'Du:', correct: 'Richtig:',
+    statsTitle: '📊 Statistik',
+    statsToday: '📅 Heute', statsWeek: '📈 7 Tage', statsWeak: '🎯 Schwächen',
+    statsSessions: 'Gespielt', statsTotal: 'Aufgaben gelöst',
+    statsCorrect: 'Richtig', statsAccuracy: 'Genauigkeit', statsTime: 'Lernzeit',
+    statsMin: 'Min', statsBack: '← Zurück', statsClear: '🗑 Löschen',
+    statsEmpty: 'Heute noch nicht gespielt', statsWeekEmpty: 'Keine Daten für 7 Tage',
+    statsWeakEmpty: 'Noch keine Fehler 🎉', statsWeakErrors: 'Fehler:',
+    statsDays: 'Pro Tag:', statsAvg: 'Durchschnitt', statsAllTotal: 'Aufgaben gesamt',
+    explainDecomp: 'Zerlegen wir', explainParts: 'in bequeme Teile:',
+    explainDecompAdd: 'Zerlegen wir', explainPartsAdd: 'in Teile:',
+    explainComplement: 'Wie viel muss man zu', explainComplementTo: 'addieren, um',
+    explainSum: 'Addiere die Teile:', explainResult: 'Also:',
+    explainZero: 'Minus 0 — die Zahl bleibt gleich!',
+    explainSame: 'Minus dieselbe Zahl — Ergebnis ist 0!',
+    motivCorrect: ['Wow, du bist ein Mathe-Genie! 🌟','Super! Weiter so! 💪','Bravo! Ich bin so stolz auf dich! 🎉','Fantastisch! Du überraschst mich! 🍯','Richtig! Du bist klasse! 🐾','Toll! Noch ein bisschen und du bist Champion! 🏆','Oh! Das war schnell! ⚡','Prima! Mach weiter so! 🚀'],
+    motivWrong: ['Nicht traurig sein — Fehler sind Lehrer! 💡','Nicht schlimm! Lass uns zusammen schauen 🐻','Fehler sind normal! Hauptsache verstehen 📚','Ich irre mich auch manchmal! Probieren wir nochmal 🍀','Egal! Die nächste schaffst du! 🌱'],
+    streakMsg: [null,null,'2 hintereinander! Super! 🔥','3 hintereinander! Klasse! ⚡','4 hintereinander! Unglaublich! 🌟','5 hintereinander! Champion! 🏆'],
+    homeConfirm: 'Zurück zum Menü? Fortschritt geht verloren.',
+    clearConfirm: 'Alle Statistiken löschen?',
+  },
+  en: {
+    appTitle: "Math<br>with Teddy", menuBubble: "Hi! I'm Teddy. Let's do some maths together! 🍯",
+    opLabel: 'Choose an operation',
+    opAdd: '➕ Addition', opSub: '➖ Subtraction', opBoth: '🔀 Mixed',
+    lvlLabel: 'Choose a level',
+    lvl1: '🌱 Easy', lvl1sub: 'up to 100',
+    lvl2: '⭐ Medium', lvl2sub: 'up to 200',
+    lvl3: '🔥 Hard', lvl3sub: 'up to 500',
+    startBtn: '🚀 Start!',
+    statsBtn: '📊 Parent Statistics',
+    qLabel: 'Question', correctLabel: '✅ Correct', wrongLabel: '❌ Mistakes',
+    bearAdd: 'What is the answer? 🤔', bearSub: 'Calculate! 🐾',
+    bearCorrect: 'Yes, correct! 🎊', bearStreak: '🔥 You are on fire!',
+    correctBig: '🎉 Correct!',
+    wrongBig: '😢 Not quite...',
+    wrongMsg: 'You wrote', wrongRight: 'correct answer:',
+    nextBtn: '➡️ Next', finishBtn: '🏁 Results',
+    result10: 'All 10 out of 10! You are a true champion! 🏆',
+    result9: 'Almost perfect! Just a little more! 🌟',
+    result7: 'out of 10 — great! Almost at three stars 💪',
+    result5: "out of 10 — good start! Let's practice more! 📚",
+    result3: "No worries! Check the mistakes below 🐻",
+    result0: "We are still learning! Go through it with mum or dad 🍯",
+    againBtn: '🔄 Again!', menuBtn: '🏠 Menu',
+    mistakesTitle: '📋 Mistake Review',
+    youWrote: 'You:', correct: 'Correct:',
+    statsTitle: '📊 Statistics',
+    statsToday: '📅 Today', statsWeek: '📈 7 Days', statsWeak: '🎯 Weak Spots',
+    statsSessions: 'Sessions played', statsTotal: 'Problems solved',
+    statsCorrect: 'Correct', statsAccuracy: 'Accuracy', statsTime: 'Study time',
+    statsMin: 'min', statsBack: '← Back', statsClear: '🗑 Clear',
+    statsEmpty: 'No activity today', statsWeekEmpty: 'No data for 7 days',
+    statsWeakEmpty: 'No mistakes yet 🎉', statsWeakErrors: 'mistakes:',
+    statsDays: 'By day:', statsAvg: 'Average accuracy', statsAllTotal: 'Total problems',
+    explainDecomp: 'Split', explainParts: 'into easy parts:',
+    explainDecompAdd: 'Split', explainPartsAdd: 'into parts:',
+    explainComplement: 'How much do we add to', explainComplementTo: 'to get',
+    explainSum: 'Add the parts:', explainResult: 'So:',
+    explainZero: 'Minus 0 — the number stays the same!',
+    explainSame: 'Minus the same number — the result is 0!',
+    motivCorrect: ['Wow, you are a math genius! 🌟','Super! Keep it up! 💪','Bravo! I am so proud of you! 🎉','Fantastic! You amaze me! 🍯','Correct! You are brilliant! 🐾','Excellent! A little more and you are champion! 🏆','Oh! That was fast! ⚡','Well done! Keep going! 🚀'],
+    motivWrong: ["Don't worry — mistakes teach us! 💡","That's okay! Let's figure it out together 🐻","Making mistakes is normal! The key is to understand 📚","I get confused sometimes too! Let's try again 🍀","No worries! The next one is yours! 🌱"],
+    streakMsg: [null,null,'2 in a row! You are on fire! 🔥','3 in a row! Amazing! ⚡','4 in a row! Incredible! 🌟','5 in a row! Champion! 🏆'],
+    homeConfirm: 'Go back to menu? Progress will be lost.',
+    clearConfirm: 'Delete all statistics?',
+  }
+};
+
+let currentLang = 'ru';
+function t(key) { return LANG[currentLang][key]; }
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
+  document.getElementById('lang-de').classList.toggle('active', lang === 'de');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  applyLangToMenu();
+  applyLangToScoreBar();
+}
+
+function applyLangToScoreBar() {
+  const lq = document.getElementById('lbl-q');
+  const lc = document.getElementById('lbl-correct');
+  const lw = document.getElementById('lbl-wrong');
+  if (lq) lq.textContent = t('qLabel');
+  if (lc) lc.textContent = t('correctLabel');
+  if (lw) lw.textContent = t('wrongLabel');
+}
+
+function applyLangToMenu() {
+  const L = LANG[currentLang];
+  document.getElementById('menu-bubble').textContent = L.menuBubble;
+  document.getElementById('app-title').innerHTML = L.appTitle;
+  document.getElementById('lbl-op').textContent = L.opLabel;
+  document.querySelector('[data-op="add"]').textContent = L.opAdd;
+  document.querySelector('[data-op="sub"]').textContent = L.opSub;
+  document.querySelector('[data-op="both"]').textContent = L.opBoth;
+  document.getElementById('lbl-lvl').textContent = L.lvlLabel;
+  const lvlBtns = document.querySelectorAll('#lvl-group .btn-level');
+  lvlBtns[0].innerHTML = `<span class="lvl-icon">${L.lvl1.split(' ')[0]}</span><span class="lvl-text"><b>${L.lvl1.split(' ').slice(1).join(' ')}</b><small>${L.lvl1sub}</small></span>`;
+  lvlBtns[1].innerHTML = `<span class="lvl-icon">${L.lvl2.split(' ')[0]}</span><span class="lvl-text"><b>${L.lvl2.split(' ').slice(1).join(' ')}</b><small>${L.lvl2sub}</small></span>`;
+  lvlBtns[2].innerHTML = `<span class="lvl-icon">${L.lvl3.split(' ')[0]}</span><span class="lvl-text"><b>${L.lvl3.split(' ').slice(1).join(' ')}</b><small>${L.lvl3sub}</small></span>`;
+  document.querySelector('.btn-start').textContent = L.startBtn;
+  document.querySelector('.btn-stats').textContent = L.statsBtn;
+}
+
 const TOTAL = 10;
 let op = 'both', lvl = 1;
 let qIndex = 0, correct = 0, wrong = 0;
@@ -460,30 +668,9 @@ let mistakeLog = [];
 let autoNextTimer = null; // {a, b, op, userAns, right}
 let streak = 0; // consecutive correct answers
 
-const MOTIVATE_CORRECT = [
-  'Вот это да! Ты настоящий математик! 🌟',
-  'Супер! Так держать! 💪',
-  'Браво! Мне так за тебя радостно! 🎉',
-  'Великолепно! Ты меня удивляешь! 🍯',
-  'Правильно! Ты умничка! 🐾',
-  'Отлично! Ещё немного — и станешь чемпионом! 🏆',
-  'Ух ты! Это было быстро! ⚡',
-  'Молодец! Продолжай — у тебя всё получается! 🚀',
-];
-const MOTIVATE_WRONG = [
-  'Не расстраивайся — ошибки нас учат! 💡',
-  'Ничего страшного! Давай разберёмся вместе 🐻',
-  'Ошибиться — это нормально! Главное — понять 📚',
-  'Даже я иногда путаюсь! Попробуем ещё раз 🍀',
-  'Не беда! Следующий будет твоим! 🌈',
-];
-const STREAK_MSG = [
-  null, null,
-  '2 подряд! Зажигаешь! 🔥',
-  '3 подряд! Ты в ударе! ⚡',
-  '4 подряд! Просто невероятно! 🌟',
-  '5 подряд! Ты — чемпион! 🏆',
-];
+function MOTIVATE_CORRECT() { return t('motivCorrect'); }
+function MOTIVATE_WRONG()   { return t('motivWrong'); }
+function STREAK_MSG()        { return t('streakMsg'); }
 
 function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
@@ -494,13 +681,13 @@ function explainSubtraction(a, b) {
   if (b === 0) {
     return `<div class="explain-steps">
       <div class="step-final">✅ ${a} − 0 = <b>${a}</b>
-      <div class="step-hint">Если вычитаем 0 — число не меняется!</div></div>
+      <div class="step-hint">${t('explainZero')}</div></div>
     </div>`;
   }
   if (a === b) {
     return `<div class="explain-steps">
       <div class="step-final">✅ ${a} − ${b} = <b>0</b>
-      <div class="step-hint">Если вычитаем то же число — получаем 0!</div></div>
+      <div class="step-hint">${t('explainSame')}</div></div>
     </div>`;
   }
 
@@ -536,7 +723,7 @@ function explainSubtraction(a, b) {
 
   const decomp = steps.map(s => s[1]).join(' + ');
   let html = '<div class="explain-steps">';
-  html += `<div class="step">💡 Разложим <b>${b}</b> на удобные части: <span class="decomp">${decomp}</span></div>`;
+  html += `<div class="step">💡 ${t('explainDecomp')} <b>${b}</b> ${t('explainParts')} <span class="decomp">${decomp}</span></div>`;
   steps.forEach(s => {
     html += `<div class="step-eq">${s[0]} − <b>${s[1]}</b> = <b>${s[2]}</b></div>`;
   });
@@ -565,7 +752,7 @@ function explainAddition(a, b) {
 
   const decomp = steps.map(s => s[1]).join(' + ');
   let html = '<div class="explain-steps">';
-  html += `<div class="step">💡 Разложим <b>${b}</b> на части: <span class="decomp">${decomp}</span></div>`;
+  html += `<div class="step">💡 ${t('explainDecompAdd')} <b>${b}</b> ${t('explainPartsAdd')} <span class="decomp">${decomp}</span></div>`;
   steps.forEach(s => {
     html += `<div class="step-eq">${s[0]} + <b>${s[1]}</b> = <b>${s[2]}</b></div>`;
   });
@@ -605,7 +792,7 @@ function goMenu() { show('screen-menu'); }
 
 function confirmHome() {
   if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = null; }
-  if (qIndex === 0 || confirm('Вернуться в меню? Прогресс будет потерян.')) {
+  if (qIndex === 0 || confirm(t('homeConfirm'))) {
     goMenu();
   }
 }
@@ -630,12 +817,12 @@ function newQuestion() {
     a = rand(max); b = rand(max - a);
     rightAnswer = a + b;
     document.getElementById('q-text').textContent = `${a} + ${b} = ?`;
-    document.getElementById('bear-say').textContent = 'Сколько будет? 🤔';
+    document.getElementById('bear-say').textContent = t('bearAdd');
   } else {
     a = Math.max(1, rand(max)); b = rand(a);
     rightAnswer = a - b;
     document.getElementById('q-text').textContent = `${a} − ${b} = ?`;
-    document.getElementById('bear-say').textContent = 'Посчитай! 🐾';
+    document.getElementById('bear-say').textContent = t('bearSub');
   }
   currentA = a; currentB = b;
   document.getElementById('btn-minus').style.display = 'none';
@@ -670,24 +857,24 @@ function checkAnswer() {
   if (userAns === rightAnswer) {
     correct++;
     streak++;
-    const motiv = randomFrom(MOTIVATE_CORRECT);
-    const streakMsg = streak >= 2 && streak < STREAK_MSG.length ? STREAK_MSG[streak] : null;
+    const motiv = randomFrom(MOTIVATE_CORRECT());
+    const streakMsg = streak >= 2 && streak < STREAK_MSG().length ? STREAK_MSG()[streak] : null;
     fb.className = 'feedback correct';
-    fb.innerHTML = `<span class="big">🎉 Правильно!</span>${motiv}${streakMsg ? `<br><span class="streak-badge">${streakMsg}</span>` : ''}`;
-    document.getElementById('bear-say').textContent = streak >= 3 ? '🔥 Ты в ударе!' : 'Ура, верно! 🎊';
+    fb.innerHTML = `<span class="big">${t('correctBig')}</span>${motiv}${streakMsg ? `<br><span class="streak-badge">${streakMsg}</span>` : ''}`;
+    document.getElementById('bear-say').textContent = streak >= 3 ? t('bearStreak') : t('bearCorrect');
     bounceBear('bear-game');
     // confetti fires in showResult, not here
   } else {
     wrong++;
     streak = 0;
     mistakeLog.push({ a: currentA, b: currentB, op: currentOp, userAns: userAns, right: rightAnswer });
-    const motiv = randomFrom(MOTIVATE_WRONG);
+    const motiv = randomFrom(MOTIVATE_WRONG());
     let explanation = currentOp === 'sub'
       ? explainSubtraction(currentA, currentB)
       : explainAddition(currentA, currentB);
     fb.className = 'feedback wrong';
-    fb.innerHTML = `<span class="big">😢 Не совсем...</span>Ты написал <b>${userAns}</b>, а правильно: <b>${rightAnswer}</b><br>${motiv}<br><div class="explain-box">${explanation}</div>`;
-    document.getElementById('bear-say').textContent = randomFrom(MOTIVATE_WRONG).replace(/[!🍀🌈📚💡🐻]/g, '').trim() + ' 🐻';
+    fb.innerHTML = `<span class="big">${t('wrongBig')}</span>${t('wrongMsg')} <b>${userAns}</b>, ${t('wrongRight')} <b>${rightAnswer}</b><br>${motiv}<br><div class="explain-box">${explanation}</div>`;
+    document.getElementById('bear-say').textContent = randomFrom(MOTIVATE_WRONG()).replace(/[!🍀🌈📚💡🐻]/g, '').trim() + ' 🐻';
     shakeBear('bear-game');
   }
 
@@ -698,7 +885,7 @@ function checkAnswer() {
   qIndex++;
   // Показываем кнопку сразу в обоих случаях
   document.getElementById('btn-next').style.display = 'inline-flex';
-  document.getElementById('btn-next').textContent = qIndex >= TOTAL ? '🏁 Результат' : '➡️ Дальше';
+  document.getElementById('btn-next').textContent = qIndex >= TOTAL ? t('finishBtn') : t('nextBtn');
 
   if (userAns === rightAnswer) {
     // Верно — автопереход через 2 сек, но можно нажать раньше
@@ -710,7 +897,7 @@ function checkAnswer() {
   } else {
     // Ошибка — только по кнопке, без таймера
     if (qIndex >= TOTAL) {
-      document.getElementById('btn-next').textContent = '🏁 Результат';
+      document.getElementById('btn-next').textContent = t('finishBtn');
     }
   }
 }
@@ -730,26 +917,19 @@ function showResult() {
 
   const pct = correct / TOTAL;
 
-  // Stars + bear messages
   let stars, bearSay;
   if (pct === 1) {
-    stars = '⭐⭐⭐';
-    bearSay = 'Все 10 из 10! Ты настоящий чемпион! 🏆';
+    stars = '⭐⭐⭐'; bearSay = t('result10');
   } else if (pct >= .9) {
-    stars = '⭐⭐⭐';
-    bearSay = `Почти идеально — ${correct} из ${TOTAL}! Ещё чуть-чуть до рекорда! 🌟`;
+    stars = '⭐⭐⭐'; bearSay = `${correct} из ${TOTAL} — ${t('result9')}`;
   } else if (pct >= .7) {
-    stars = '⭐⭐';
-    bearSay = `${correct} из ${TOTAL} — отлично! До трёх звёзд осталось совсем немного 💪`;
+    stars = '⭐⭐'; bearSay = `${correct} ${t('result7')}`;
   } else if (pct >= .5) {
-    stars = '⭐';
-    bearSay = `${correct} из ${TOTAL} — хорошее начало! Повторим — и будет лучше! 📚`;
+    stars = '⭐'; bearSay = `${correct} ${t('result5')}`;
   } else if (pct >= .3) {
-    stars = '🌱';
-    bearSay = 'Не беда! Посмотри на ошибки ниже — там всё объяснено 🐻';
+    stars = '🌱'; bearSay = t('result3');
   } else {
-    stars = '🌱';
-    bearSay = 'Мы только учимся! Разбери ошибки вместе с мамой или папой 🍯';
+    stars = '🌱'; bearSay = t('result0');
   }
 
   document.getElementById('result-stars').textContent = stars;
@@ -769,9 +949,9 @@ function showResult() {
     list.innerHTML = mistakeLog.map(m => `
       <div class="mistake-row">
         <span class="mistake-q">${m.a} ${opSym(m.op)} ${m.b}</span>
-        <span class="mistake-user">Ты: <b>${m.userAns}</b></span>
+        <span class="mistake-user">${t('youWrote')} <b>${m.userAns}</b></span>
         <span class="mistake-arrow">→</span>
-        <span class="mistake-right">Верно: <b>${m.right}</b></span>
+        <span class="mistake-right">${t('correct')} <b>${m.right}</b></span>
       </div>
     `).join('');
     if (pct === 1) spawnConfetti();
@@ -807,7 +987,7 @@ function saveSession(data) {
 }
 
 function clearStats() {
-  if (confirm('Удалить всю статистику?')) {
+  if (confirm(t('clearConfirm'))) {
     if (storageAvailable()) {
       try { localStorage.removeItem(STORAGE_KEY); } catch {}
     }
@@ -832,6 +1012,17 @@ function saveCurrentSession() {
 // ── Show stats screen ──
 function showStats() {
   show('screen-stats');
+  // Update static labels
+  const ids = {
+    'stats-main-title': t('statsTitle'),
+    'stats-today-title': t('statsToday'),
+    'stats-week-title': t('statsWeek'),
+    'stats-weak-title': t('statsWeak'),
+    'btn-stats-back': t('statsBack'),
+    'btn-stats-clear': t('statsClear'),
+    'mistakes-title': t('mistakesTitle'),
+  };
+  Object.entries(ids).forEach(([id, val]) => { const el = document.getElementById(id); if(el) el.textContent = val; });
 
   // Показать предупреждение если localStorage недоступен
   const existing = document.getElementById('storage-warning');
@@ -854,7 +1045,7 @@ function showStats() {
   // ── TODAY ──
   const todayBody = document.getElementById('stats-today-body');
   if (todaySessions.length === 0) {
-    todayBody.innerHTML = '<div class="stat-empty">Сегодня ещё не играли</div>';
+    todayBody.innerHTML = `<div class="stat-empty">${t('statsEmpty')}</div>`;
   } else {
     const tTotal   = todaySessions.reduce((s, x) => s + x.total, 0);
     const tCorrect = todaySessions.reduce((s, x) => s + x.correct, 0);
@@ -874,7 +1065,7 @@ function showStats() {
   // ── WEEK ──
   const weekBody = document.getElementById('stats-week-body');
   if (weekSessions.length === 0) {
-    weekBody.innerHTML = '<div class="stat-empty">За 7 дней нет данных</div>';
+    weekBody.innerHTML = `<div class="stat-empty">${t('statsWeekEmpty')}</div>`;
   } else {
     // Group by day
     const byDay = {};
@@ -907,7 +1098,7 @@ function showStats() {
   }));
   const top = Object.entries(mistakeCounts).sort((a,b) => b[1]-a[1]).slice(0, 5);
   if (top.length === 0) {
-    weakBody.innerHTML = '<div class="stat-empty">Ошибок пока не было 🎉</div>';
+    weakBody.innerHTML = `<div class="stat-empty">${t('statsWeakEmpty')}</div>`;
   } else {
     weakBody.innerHTML = top.map(([expr, cnt]) => {
       const sym = expr.includes('+') ? '+' : '−';
